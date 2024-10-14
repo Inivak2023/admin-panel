@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <h1>Update Links</h1>
+    <form id="linkForm">
+        <!-- 2025 Links -->
+        <h2>2025</h2>
+        <label for="BS2025">BS 2025:</label>
+        <input type="text" id="BS2025" name="BS2025"><br>
+        <label for="econ2025">Econ 2025:</label>
+        <input type="text" id="econ2025" name="econ2025"><br>
+        <label for="acc2025">Acc 2025:</label>
+        <input type="text" id="acc2025" name="acc2025"><br>
+
+        <!-- 2026 Links -->
+        <h2>2026</h2>
+        <label for="BS2026">BS 2026:</label>
+        <input type="text" id="BS2026" name="BS2026"><br>
+        <label for="econ2026">Econ 2026:</label>
+        <input type="text" id="econ2026" name="econ2026"><br>
+        <label for="acc2026">Acc 2026:</label>
+        <input type="text" id="acc2026" name="acc2026"><br>
+
+        <button type="submit">Update Links</button>
+    </form>
+
+    <script>
+        // Fetch current links and fill the form
+        fetch('/links')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('BS2025').value = data.BS2025;
+                document.getElementById('econ2025').value = data.econ2025;
+                document.getElementById('acc2025').value = data.acc2025;
+                document.getElementById('BS2026').value = data.BS2026;
+                document.getElementById('econ2026').value = data.econ2026;
+                document.getElementById('acc2026').value = data.acc2026;
+            });
+
+        // Handle form submission
+        document.getElementById('linkForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const updatedLinks = {
+                BS2025: document.getElementById('BS2025').value,
+                econ2025: document.getElementById('econ2025').value,
+                acc2025: document.getElementById('acc2025').value,
+                BS2026: document.getElementById('BS2026').value,
+                econ2026: document.getElementById('econ2026').value,
+                acc2026: document.getElementById('acc2026').value
+            };
+
+            // Send updated links to the server
+            fetch('/update-links', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedLinks)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => console.error('Error updating links:', error));
+        });
+    </script>
+</body>
+</html>
